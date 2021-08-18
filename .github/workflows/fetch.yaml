@@ -28,7 +28,7 @@ jobs:
         run: pip install vdf vpk
 
       - name: Fetch Dota2 client data
-        run: steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +force_install_dir ./dota2client +app_update 570 validate +quit
+        run: steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +app_update 570 validate +quit
 
       - name: Extract from client data
         run: python ./scripts/extract.py "${{ steps.steamcmd.outputs.directory }}/steamapps/common/dota 2 beta/"
