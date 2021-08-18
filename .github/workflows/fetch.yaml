@@ -1,0 +1,31 @@
+name: Fetch localization data with SteamCMD
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/setup-python@v2
+      - uses: actions/setup-steamcmd@v1
+      - uses: actions/checkout@v2
+
+      - name: Install packages
+        run: pip install vdf vpk
+
+      - name: Fetch Dota2 client data
+        run: steamcmd +login anonymous +force_install_dir ./dota2client +app_update 570 validate +quit
+
+      - name: Extract from client data
+        run: python ./scripts/extract.py
+
+      - name: Commit and Push
+        run: |
+          git config user.name "Nihongoka Bot"
+          git config user.email "71134725+nihongoka-bot@users.noreply.github.com"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "Client version: $(<version)"
+          git push origin master
