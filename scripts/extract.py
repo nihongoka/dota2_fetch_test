@@ -3,6 +3,7 @@ import vpk
 import vdf
 import json
 import os
+import sys
 
 class L10nRule:
     name = ''
@@ -41,10 +42,13 @@ l10ns = [
     L10nRule('richpresence', False),
 ]
 
-def main():
+def main(argv: list[str]):
+    if len(argv) != 1:
+        raise Exception('need `dota 2 beta` path')
+    dota2_path = argv[0]
     def main_version():
         head = 'ClientVersion='
-        with open('./dota2client/game/dota/steam.inf', 'r') as inf:
+        with open(f'{dota2_path}/game/dota/steam.inf', 'r') as inf:
             while True:
                 line = inf.readline().strip()
                 if line:
@@ -58,7 +62,7 @@ def main():
 
     os.makedirs('localization', exist_ok=True)
 
-    with vpk.open('./dota2client/dota/pak01_dir.vpk') as pak01:
+    with vpk.open(f'{dota2_path}/game/dota/pak01_dir.vpk') as pak01:
         for rule in l10ns:
             with pak01.get_file(rule.get_pak_path('english')) as txt:
                 data = rule.pull(vdf.load(txt))
@@ -69,4 +73,4 @@ def main():
                     print(f'Wrote "{out_name}" done!!')
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
