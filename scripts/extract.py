@@ -43,9 +43,9 @@ l10ns = [
 ]
 
 def main(argv: list[str]):
-    if len(argv) != 1:
-        raise Exception('need `dota 2 beta` path')
-    dota2_path = argv[0]
+    if len(argv) != 2:
+        raise Exception('need `dota2` path')
+    dota2_path = argv[1]
     def main_version():
         head = 'ClientVersion='
         with open(f'{dota2_path}/game/dota/steam.inf', 'r') as inf:
