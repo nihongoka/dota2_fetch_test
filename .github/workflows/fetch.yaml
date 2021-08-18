@@ -7,13 +7,21 @@ on:
 
 
 jobs:
-  build:
+  check:
+    name: Check for new updates
     runs-on: ubuntu-latest
-
     steps:
+      - uses: actions/checkout@v2
+      - run: test `curl "https://api.steampowered.com/IGCVersion_570/GetClientVersion/v1/?key=${{secrets.STEAM_API_KEY}}" | jq ".result.active_version"` -ne `cat version`
+
+  build:
+    name: Fetch and build new source strings
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - uses: CyberAndrii/setup-steamcmd@v1
-      - uses: actions/checkout@v2
 
       - name: Install packages
         run: pip install vdf vpk

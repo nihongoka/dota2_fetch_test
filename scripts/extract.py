@@ -44,7 +44,7 @@ l10ns = [
 def main():
     def main_version():
         head = 'ClientVersion='
-        with open('./dota2client/steam.inf', 'r') as inf:
+        with open('./dota2client/game/dota/steam.inf', 'r') as inf:
             while True:
                 line = inf.readline().strip()
                 if line:
