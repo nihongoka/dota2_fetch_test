@@ -49,7 +49,7 @@ def main(argv: list[str]):
     dota2_path = argv[1]
     def main_version():
         head = 'ClientVersion='
-        with open(f'{dota2_path}/game/dota/steam.inf', 'r') as inf:
+        with open(f'{dota2_path}game/dota/steam.inf', 'r') as inf:
             while True:
                 line = inf.readline().strip()
                 if line:
