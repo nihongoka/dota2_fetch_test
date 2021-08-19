@@ -30,6 +30,10 @@ jobs:
       - name: Fetch Dota2 client data
         run: steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +app_update 570 validate +quit
 
+      - run: echo ${{steps.steamcmd.outputs.directory}}
+
+      - uses: mxschmitt/action-tmate@v3
+
       - name: Extract from client data
         run: python ./scripts/extract.py "${{steps.steamcmd.outputs.directory}}/linux32/steamapps/common/dota 2 beta/"
 
