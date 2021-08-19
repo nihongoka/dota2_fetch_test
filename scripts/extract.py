@@ -43,8 +43,9 @@ l10ns = [
 ]
 
 def main(argv: list[str]):
-    if len(argv) != 2:
-        raise Exception('need `dota2` path')
+    print(argv)
+    if len(argv) < 2:
+        raise Exception('need `dota 2 beta` path')
     dota2_path = argv[1]
     def main_version():
         head = 'ClientVersion='
