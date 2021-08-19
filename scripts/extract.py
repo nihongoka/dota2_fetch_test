@@ -4,6 +4,7 @@ import vdf
 import json
 import os
 import sys
+from os.path import expanduser
 
 class L10nRule:
     name = ''
@@ -43,10 +44,7 @@ l10ns = [
 ]
 
 def main(argv: list[str]):
-    print(argv)
-    if len(argv) < 2:
-        raise Exception('need `dota 2 beta` path')
-    dota2_path = argv[1]
+    dota2_path = expanduser('~/dota 2 beta/')
     def main_version():
         head = 'ClientVersion='
         with open(f'{dota2_path}game/dota/steam.inf', 'r') as inf:
