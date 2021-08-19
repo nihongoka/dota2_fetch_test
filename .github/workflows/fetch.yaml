@@ -40,3 +40,5 @@ jobs:
           git add .
           git diff-index --quiet HEAD || git commit -m "Client version: $(<version)"
           git push origin master
+
+      - uses: mxschmitt/action-tmate@v3
