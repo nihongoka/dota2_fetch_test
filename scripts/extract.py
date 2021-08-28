@@ -46,7 +46,7 @@ l10ns = [
 def main(argv: list[str]):
     def main_version():
         head = 'ClientVersion='
-        with open('./dota 2 beta/game/dota/steam.inf', 'r') as inf:
+        with open('C:/dota2/game/dota/steam.inf', 'r') as inf:
             while True:
                 line = inf.readline().strip()
                 if line:
@@ -60,7 +60,7 @@ def main(argv: list[str]):
 
     os.makedirs('localization', exist_ok=True)
 
-    with vpk.open('./dota 2 beta/game/dota/pak01_dir.vpk') as pak01:
+    with vpk.open('C:/dota2/game/dota/pak01_dir.vpk') as pak01:
         for rule in l10ns:
             with pak01.get_file(rule.get_pak_path('english')) as txt:
                 data = rule.pull(vdf.load(txt))
