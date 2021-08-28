@@ -32,7 +32,8 @@ def remove_special_key(data: Dict[str, str]):
         'DOTA_GifterText_Title',
     ]
     for key in keys:
-        del data[key]
+        if key in data:
+            del data[key]
 
 l10ns = [
     L10nRule('abilities', False),
@@ -43,7 +44,7 @@ l10ns = [
     L10nRule('richpresence', False),
 ]
 
-def main(argv: list[str]):
+def main():
     def main_version():
         head = 'ClientVersion='
         with open('C:/dota2/game/dota/steam.inf', 'r') as inf:
