@@ -4,7 +4,6 @@ import vdf
 import json
 import os
 import sys
-from os.path import expanduser
 
 class L10nRule:
     name = ''
@@ -44,10 +43,12 @@ l10ns = [
     L10nRule('richpresence', False),
 ]
 
-def main():
+def main(argv: list[str]):
+    dota2_path = argv[1]
     def main_version():
         head = 'ClientVersion='
-        with open('C:/dota2/game/dota/steam.inf', 'r') as inf:
+        path = os.path.join(dota2_path, 'game/dota/steam.inf')
+        with open(path, 'r') as inf:
             while True:
                 line = inf.readline().strip()
                 if line:
@@ -61,7 +62,8 @@ def main():
 
     os.makedirs('localization', exist_ok=True)
 
-    with vpk.open('C:/dota2/game/dota/pak01_dir.vpk') as pak01:
+    vpk_path = os.path.join(dota2_path, 'game/dota/pak01_dir.vpk')
+    with vpk.open(vpk_path) as pak01:
         for rule in l10ns:
             with pak01.get_file(rule.get_pak_path('english')) as input:
                 data = rule.pull(vdf.loads(input.read().decode('utf-8')))

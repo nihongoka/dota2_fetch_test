@@ -7,17 +7,23 @@ on:
 
 
 jobs:
-  check:
-    name: Check for new updates
+  precheck:
+    name: Check version
     runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.new_version.outputs.version }}
+      current_version: ${{ steps.current_version.outputs.version }}
     steps:
-      - uses: actions/checkout@v2
-      - run: test `curl "https://api.steampowered.com/IGCVersion_570/GetClientVersion/v1/?key=${{secrets.STEAM_API_KEY}}" | jq ".result.active_version"` -ne `cat version`
+      - id: new_version
+        run: echo "::set-output name=version::`curl \"https://api.steampowered.com/IGCVersion_570/GetClientVersion/v1/?key=${{ secrets.STEAM_API_KEY }}\" | jq .result.active_version`"
+      - id: current_version
+        run: echo "::set-output name=version::`cat version`"
 
   build:
     name: Fetch and build new source strings
     runs-on: windows-latest
-    needs: check
+    needs: precheck
+    if: ${{ needs.precheck.outputs.new_version != needs.precheck.outputs.current_version }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -28,10 +34,10 @@ jobs:
         run: pip install vdf vpk
 
       - name: Fetch Dota2 client data
-        run: steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +force_install_dir "C:/dota2" +app_update 570 validate +quit
+        run: steamcmd +login ${{ secrets.STEAM_USERNAME }} ${{ secrets.STEAM_PASSWORD }} +force_install_dir ${{ runner.temp }}/app +app_update 570 validate +quit
 
       - name: Extract from client data
-        run: python ./scripts/extract.py
+        run: python ./scripts/extract.py ${{ runner.temp }}/app
 
       - name: Commit and Push
         run: |
