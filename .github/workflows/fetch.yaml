@@ -16,7 +16,7 @@ jobs:
 
   build:
     name: Fetch and build new source strings
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: check
     steps:
       - uses: actions/checkout@v2
@@ -28,9 +28,7 @@ jobs:
         run: pip install vdf vpk
 
       - name: Fetch Dota2 client data
-        run: |
-          steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +force_install_dir "~/dota 2 beta" +app_update 570 validate +quit
-          mv "~/dota 2 beta" .
+        run: steamcmd +login ${{secrets.STEAM_USERNAME}} ${{secrets.STEAM_PASSWORD}} +force_install_dir "./dota 2 beta" +app_update 570 validate +quit
 
       - name: Extract from client data
         run: python ./scripts/extract.py
@@ -39,6 +37,6 @@ jobs:
         run: |
           git config user.name "Nihongoka Bot"
           git config user.email "71134725+nihongoka-bot@users.noreply.github.com"
-          git add .
+          git add ./localization
           git diff-index --quiet HEAD || git commit -m "Client version: $(<version)"
           git push origin master
