@@ -62,8 +62,8 @@ def main(argv: list[str]):
 
     with vpk.open('C:/dota2/game/dota/pak01_dir.vpk') as pak01:
         for rule in l10ns:
-            with pak01.get_file(rule.get_pak_path('english')) as txt:
-                data = rule.pull(vdf.load(txt))
+            with pak01.get_file(rule.get_pak_path('english')) as input:
+                data = rule.pull(vdf.loads(input.read().decode('utf-8')))
                 remove_special_key(data)
                 out_name = f'localization/{rule.name}_english.json'
                 with open(out_name, 'w', encoding='utf-8') as out:
